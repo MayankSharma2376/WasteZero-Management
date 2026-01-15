@@ -42,10 +42,10 @@ function Login() {
             </form>
 
            <div className='my-4 text-center text-gray-500'>or</div>
-           <button className='w-full border py-2 rounded-lg mb-2'>
+           <button className='w-full border py-2 rounded-lg mb-2  bg-blue-600'>
             Continue with Google
            </button>
-           <button className='w-full border py-2 rounded-lg'>
+           <button className='w-full border py-2 rounded-lg bg-red-600'>
             Continue with Github
            </button>
            <p className="text-sm text-center mt-4">

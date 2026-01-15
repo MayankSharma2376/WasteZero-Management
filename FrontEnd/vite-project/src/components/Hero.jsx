@@ -28,7 +28,7 @@ function Hero() {
 
                 <div className='flex-1 text-center'>
                     <div className='w-full h-64 bg-slate-800 rounded-xl flex items-center justify-center text-gray-400'>
-                        <img src={Image} alt="WasteZero" className='w-full max-w-md  mx-auto' />
+                        {/* <img src={Image} alt="WasteZero" className='w-full max-w-md  mx-auto bg-cover' /> */}
                     </div>
                 </div>
             </div>
