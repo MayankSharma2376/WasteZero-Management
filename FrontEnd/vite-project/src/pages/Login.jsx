@@ -1,61 +1,90 @@
-import React from 'react'
-import AuthLayout from '../components/AuthLayout'
-import { useState } from 'react'
-import {FaEye, FaEyeSlash} from "react-icons/fa"
-import LoginIllustration from '../components/LoginIllustration'
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import AuthLayout from "../components/AuthLayout";
+import LoginIllustration from "../components/LoginIllustration";
+import { loginUser } from "../services/authService";
 
-function Login() {
-    const [showPassword, setShowPassword] = useState(false)
+const Login = () => {
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await loginUser(form);
+      navigate("/dashboard");
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    }
+  };
+
   return (
-    <div>
-        <AuthLayout illustartion={<LoginIllustration/>} >
-        <div className='w-full max-w-md bg-white rounded-xl shadow p-6'>
-            <p className='text-sm text-green-700 mb-4 cursor-pointer'>
-                ← Back to Home
-            </p>
-            <h2 className='text-2xl font-bold mb-1'>Welcome Back!</h2>
-            <p className='text-gray-600 mb-6'>
-                Sign in to your WasteZero account
-            </p>
-            <form action="" className='space-y-4'>
-                <input type="email" placeholder='Enter your email' className='w-full border rounded-lg p-3' />
-                <div className='relative'>
-                    <input type={showPassword ? "text" : "password"}  placeholder='Enter your password' className='w-full border rounded-lg p-3 pr-10'/>
-                    <span className='absolute right-3 top-3 cursor-pointer text-gray-500' onClick={()=>setShowPassword(!showPassword)}>{showPassword ? <FaEyeSlash/> : <FaEye/>}</span>
+    <AuthLayout illustration={<LoginIllustration />}>
+      <div className="bg-white p-6 rounded-xl shadow w-full max-w-md">
+        <Link to="/" className="text-green-700 text-sm">
+          ← Back to Home
+        </Link>
 
-                </div>
+        <h2 className="text-2xl font-bold my-4">Welcome Back</h2>
 
-                <div className='flex justify-between text-sm'>
-                    <label htmlFor="" className='flex items-center gap-2'>
-                        <input type="checkbox" />
-                        Remember me
-                    </label>
-                    <span className='text-green-700 curspr-pointer'>
-                        Forgot Password
-                    </span>
-                </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="relative">
+            <FaEnvelope className="absolute left-3 top-3 text-gray-400" />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              className="w-full border p-3 pl-10 rounded"
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-                <button className='w-full bg-green-700 text-white py-3 rounded-lg hover:bg-green-800'>
-                     Sign In
-                </button>
-                
-            </form>
+          <div className="relative">
+            <FaLock className="absolute left-3 top-3 text-gray-400" />
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              className="w-full border p-3 pl-10 pr-10 rounded"
+              onChange={handleChange}
+              required
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-3 cursor-pointer text-gray-400"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
 
-           <div className='my-4 text-center text-gray-500'>or</div>
-           <button className='w-full border py-2 rounded-lg mb-2  bg-blue-600'>
-            Continue with Google
-           </button>
-           <button className='w-full border py-2 rounded-lg bg-red-600'>
-            Continue with Github
-           </button>
-           <p className="text-sm text-center mt-4">
-          Don’t have an account?{" "}
-          <span className="text-green-700 cursor-pointer">Sign Up</span>
-        </p>
+          <button className="w-full bg-green-700 text-white py-3 rounded hover:bg-green-800">
+            Login
+          </button>
+        </form>
+
+        <div className="text-sm text-center mt-4 space-y-2">
+          <Link to="/forgot-password" className="text-green-700 block">
+            Forgot Password?
+          </Link>
+          <p>
+            Don’t have an account?{" "}
+            <Link to="/register" className="text-green-700">
+              Register
+            </Link>
+          </p>
         </div>
-        </AuthLayout>
-    </div>
-  )
-}
+      </div>
+    </AuthLayout>
+  );
+};
 
-export default Login
+export default Login;
